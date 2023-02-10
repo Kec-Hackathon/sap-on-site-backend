@@ -107,4 +107,14 @@ export class ActivityService {
             }
         }
     }
+
+    async updateActivity(id: string) {
+        const activity = await this.activityModel.updateOne(
+            { _id: id },
+            { $set: { is_locked: true } },
+            { new: true }
+        )
+
+        return activity;
+    }
 }

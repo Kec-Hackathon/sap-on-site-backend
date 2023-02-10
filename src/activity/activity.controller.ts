@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { MarkService } from 'src/mark/mark.service';
 import { ActivityService } from './activity.service';
 
 @Controller('activity')
 export class ActivityController {
-    constructor(private activityService: ActivityService) { }
+    constructor(private activityService: ActivityService, private markService: MarkService) { }
 
     @Get()
     async getActivity(): Promise<any> {
@@ -30,7 +31,7 @@ export class ActivityController {
     }
 
     @Get('/department/:dept')
-    async getActivityByDepartment(@Param('dept') department: string): Promise<any>{
+    async getActivityByDepartment(@Param('dept') department: string): Promise<any> {
         return await this.activityService.getActivityByDepartment(department);
     }
 
@@ -51,5 +52,15 @@ export class ActivityController {
                 message: "Activity Uploaded Successfully!"
             }
         }
+    }
+
+    @Put('/update-status/:id')
+    async updateActivityStatus(@Param('id') id: string, @Body() activityData: any) {
+        const activity = await this.activityService.updateActivity(id);
+
+        const mark = await this.markService.updateMark(activityData.uploader_id, activityData.mark, activityData.activity_type);
+
+        return { result: true, message: "Activity Status Updated!" }
+
     }
 }
