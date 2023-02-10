@@ -3,7 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
+import { ActivityModule } from 'src/activity/activity.module';
 import { CloudinaryModule } from 'src/core/cloudinary/cloudinary.module';
+import { MarkController } from 'src/mark/mark.controller';
+import { MarkModule } from 'src/mark/mark.module';
+import { MarkService } from 'src/mark/mark.service';
 import { UserSchema } from './schema/user.schema';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
@@ -23,7 +27,8 @@ import { UserService } from './user.service';
           },
         };
       },
-    })
+    }),
+    MarkModule
   ],
   controllers: [UserController],
   providers: [UserService],

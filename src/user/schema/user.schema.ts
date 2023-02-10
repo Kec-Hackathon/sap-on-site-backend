@@ -1,5 +1,5 @@
 import { Schema } from "@nestjs/mongoose";
-import { Prop, SchemaFactory } from "@nestjs/mongoose/dist";
+import { Prop, SchemaFactory } from "@nestjs/mongoose";
 import mongoose from "mongoose";
 
 export enum USER_TYPE {
@@ -19,7 +19,7 @@ export class User {
     @Prop({ required: true, type: String, unique: true })
     email: string
 
-    @Prop({ type: String, unique: true })
+    @Prop({ type: String, unique: true, default: Date.now() })
     roll_no: string
 
     @Prop({ required: true, type: String, minlength: 6 })
@@ -42,6 +42,9 @@ export class User {
 
     @Prop({ type: Boolean })
     is_admin: boolean;
+
+    @Prop({ type: Boolean })
+    global_admin: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

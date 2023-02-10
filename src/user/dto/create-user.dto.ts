@@ -8,9 +8,6 @@ export class CreateUserDto {
     readonly department: string
     readonly mentor_id: string
     readonly year: string
-    readonly profile: {
-        file: any,
-        folder: string
-    }
+    readonly profile: any
     readonly user_type: USER_TYPE
 }
