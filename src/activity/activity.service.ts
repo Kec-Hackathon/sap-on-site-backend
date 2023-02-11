@@ -14,14 +14,18 @@ export class ActivityService {
         return { activities };
     }
 
+    async getActivityById(id: string): Promise<any> {
+        const activity = await this.activityModel.findById(id).populate('uploader_id');
+        return activity;
+    }
+
     async getActivityByUserId(id: string): Promise<any> {
         const activites = await this.activityModel.find({ uploader_id: id });
         return { activites }
     }
 
     async getActivityByDepartment(department: string): Promise<any> {
-        const activites = await this.activityModel.find({})
-
+        const activites = await this.activityModel.find({}).populate({ path: 'uploader_id', match: { department: department } })        
         return activites
     }
 
@@ -114,7 +118,6 @@ export class ActivityService {
             { $set: { is_locked: true } },
             { new: true }
         )
-
         return activity;
     }
 }

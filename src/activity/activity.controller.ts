@@ -24,6 +24,12 @@ export class ActivityController {
         }
     }
 
+    @Get('/:id')
+    async getActivityById(@Param('id') id: string): Promise<any> {
+        const activity = await this.activityService.getActivityById(id);
+        return activity;
+    }
+
     @Get('/s/:id')
     async getActivityByStudentId(@Param('id') id: string): Promise<any> {
         const activites = await this.activityService.getActivityByUserId(id);
@@ -32,7 +38,21 @@ export class ActivityController {
 
     @Get('/department/:dept')
     async getActivityByDepartment(@Param('dept') department: string): Promise<any> {
-        return await this.activityService.getActivityByDepartment(department);
+        const activites = await this.activityService.getActivityByDepartment(department);
+        const updatedActivites = [];
+        activites.forEach(ele => {
+            const obj = {};
+            obj['name'] = ele.uploader_id.name
+            obj['roll_no'] = ele.uploader_id.roll_no
+            obj['year'] = ele.uploader_id.year
+            obj['uploadedAt'] = `${new Date(ele.createdAt).getDate()} - ${new Date(ele.createdAt).getMonth()} - ${new Date(ele.createdAt).getFullYear()}`
+            obj['event'] = ele?.event_name ? ele?.event_name : (ele?.club_name ? ele?.club_name : '')
+            obj['mark'] = ele.mark
+            obj['is_locked'] = ele.is_locked
+            obj['activity'] = ele?.activity_type
+            updatedActivites.push(obj);
+        })
+        return updatedActivites;
     }
 
     @Post('/')
